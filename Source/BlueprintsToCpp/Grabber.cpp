@@ -3,6 +3,7 @@
 
 #include "Grabber.h"
 
+
 // Sets default values for this component's properties
 UGrabber::UGrabber()
 {
@@ -10,7 +11,7 @@ UGrabber::UGrabber()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+	UE_LOG(LogTemp, Warning, TEXT("Grabber Constructor."));
 }
 
 
@@ -19,7 +20,7 @@ void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	UE_LOG(LogTemp, Warning, TEXT("Grabber BeginPlay."));
 	
 }
 
@@ -28,7 +29,26 @@ void UGrabber::BeginPlay()
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
 
+
+FVector UGrabber::GetMaxGrabLocation() const
+{
+	return GetComponentLocation() + GetComponentRotation().Vector() * MaxGrabDistance;
+}
+
+
+FVector UGrabber::GetHoldLocation() const
+{
+	return GetComponentLocation() + GetComponentRotation().Vector() * HoldDistance;
+}
+
+UPhysicsHandleComponent* UGrabber::GetPhysicsComponent() const
+{
+	return GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+}
+
+bool UGrabber::TraceForPhysicsBodies_Implementation(AActor*& HitActor, UPrimitiveComponent*& HitComponent)
+{
+	return false;
+}
